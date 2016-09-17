@@ -9000,3 +9000,48 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+const issuesWithUpdatedApiUrl = issues.map(function(issue){
+  if (issue.url.includes("api.github.com")) {
+    return Object.assign({}, issue, {
+      url: issue.url.replace("api.github.com", "api-v2.github.com")
+    })
+  }
+})
+
+const commentCountAcrossIssues = issues.map((issue) => issue.comments_count).reduce((previousValue, currentValue) => previousValue + currentValue)
+
+const openIssues = issues.map(function(issue) {
+  if (issue["state"] === "open") {
+    return issue
+  }
+}).filter(function(n){ return n != undefined })
+
+
+// This pull request has been automatically created by learn.co.
+const nonAutomaticIssues = issues.map(function(issue) {
+  if (issue["body"] !== "This pull request has been automatically created by learn.co.") {
+    return issue
+  }
+}).filter(function(n){ return n != undefined })
+
+
+const $tbody = document.getElementById('results')
+
+// $tbody.innerHTML = nonAutomaticIssues.map(function(issue) {
+//   `<tr>
+//     <td>${issue.body}</td>
+//     <td>${issue.created_at}</td>
+//     <td>${issue.state}</td>
+//   </tr>`
+// }).join('')
+
+// Why does this only work with an arrow function...
+// Took me way too long to figure this out
+$tbody.innerHTML = nonAutomaticIssues.map(issue =>
+    `<tr>
+      <td>${issue.body}</td>
+      <td>${issue.created_at}</td>
+      <td>${issue.state}</td>
+    </tr>`
+  ).join('');
